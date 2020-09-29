@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="box">
+        <h1>{{title}}</h1>
+        <p> {{content}}</p>
+    </div>
+    <script>
+        var oBox = document.getElementsByClassName('box')[0];
+        var tpl = oBox.innerHTML;
+        console.log(tpl);
+
+        function temFun(a,b) {
+
+            // 采用正则匹配 match 查看
+            var res = tpl.replace(/{{(.*?)}}/g,function (name,key) {
+            return {
+                title :a,
+                content:b
+            }[key]
+            })
+            oBox.innerHTML = res;
+            console.log(res);
+        }
+        var a = '这是我的标题'
+        var b = '这是我的内容'
+        temFun(a,b)
+    </script>
+</body>
+</html>
