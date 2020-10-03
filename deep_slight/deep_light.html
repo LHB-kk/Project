@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 深浅拷贝
+    在JS中的数据类型可分为两种：基本类型和引用类型。基本类型有undefined,null,Boolean,String,Number,Symbol等，
+    引用类型有Object,Array,Date,Function,RegExp等。基本类型值在内存中占据固定大小，保存在栈内存中，引用类型的值是对象，
+    保存在堆内存中，而栈内存储的是对象的变量标识符和对象在堆内存中的存储地址。不同类型的复制方式是不同的。对于基本类型，
+    从一个变量向另外一个新变量复制基本类型的值，会创建这个值的一个副本，并将该副本复制给新变量。对于引用类型，
+    从一个变量向另一个新变量复制引用类型的值，其实复制的是指针，最终两个变量都指向同一个对象。
+    -->
+    <!-- 浅拷贝
+        浅拷贝就是直接复制，相当于把一个对象中的所有的内容，
+        复制一份给另一个对象，对于基本类型复制的是具体的值的副本，对于引用类型复制的是指针。
+    -->
+    <script>
+        // 浅拷贝
+        var obj1 = {
+            age:18,
+            name:'lhb',
+            car:["bc","bm","tsl"]
+        }
+        // 另一个对象
+        var obj2 = {};
+        // 把一个对象的属性复制到另一个对象中，浅拷贝
+        // 把 a对象中的所有属性复制到对象b中
+        function extend(a,b) {
+            for (var key in a) {
+                b[key] = a[key];
+            }
+        }
+        extend(obj1,obj2);
+        console.log(obj1);
+        console.log(obj2);
+        obj2.car[0] = "hhh"
+        // obj1.car[0] ='hhh'
+        // obj2.car[0] ='hhh'
+        console.log(obj1);
+        console.log(obj2);
+
+        // 深拷贝
+
+        // 深拷贝还是复制，对于基本类型复制的是具体的值的副本，对于引用类型会找到对象中具体的属性或者方法，
+        // 并且开辟新的相应的空间，一个一个的复制到另一个对象中，在这个过程中需要使用递归
+
+        var obj3 = {
+            age:18,
+            name:'lhb',
+            car:["bc","bm","tsl"],
+            dog: {
+                name:'欢欢',
+                color:'black and white',
+                age:3
+            }
+        }
+        // 空对象
+        var obj4 = {};
+        // 利用递归，把对象中的所有的数据深拷贝到对象中
+        function deepExtend(a,b) {
+            for (var key in a) {
+                // 先获取a对象中的每一个属性的值
+                var item = a[key]
+                // 判断这个属性是不是数组
+                if (item instanceof Array) {
+                    // 如果数组，那么在b对象中添加一个新的属性，并且这个属性值也是数组
+                    b[key] = [];
+                    // 调用deepExtend这个方法，把a中的这个属性的值依次复制给b对象中的这个属性
+                    deepExtend(item,b[key])
+                } else if (item instanceof Object) {
+                    // 判断是否是对象
+                    b[key] = {};
+                    deepExtend(item,b[key])
+                } else {
+                    // 如果值是普通的数据直接复制到b对象的这个属性中
+                    b[key] = item
+                }
+            }
+        }
+        deepExtend(obj3,obj4)
+        console.log(obj3);
+        console.log(obj4);
+        obj3.car[0] = "hhh"
+        // obj3.car[0] = 'hhh'
+        // obj4.car[0] = 'bc'
+        console.log(obj3);
+        console.log(obj4);
+    </script>
+</body>
+</html>
